@@ -46,7 +46,8 @@
   .inv {
     display: flex;
     flex-flow: row wrap;
-    overflow: scroll;
+    overflow-y: scroll;
     height: 100vh;
+    grid-column: 2;
   }
 </style>

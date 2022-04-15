@@ -4,6 +4,7 @@
 	import { initData } from "./data";
 	import Element from "./Element.svelte";
 	import Inv from "./Inv.svelte";
+import Picked from "./Picked.svelte";
 	import Sidebar from "./Sidebar.svelte";
 	import { error } from "./ui";
 
@@ -52,6 +53,7 @@
 			<div class="main">
 				<Sidebar/>
 				<Inv/>
+				<Picked/>
 			</div>
 		{:else}
 			<div class="container">
@@ -74,7 +76,6 @@
 
 <style>
 	.main {
-		display: flex;
-		flex-direction: row;
+		display: grid;
 	}
 </style>

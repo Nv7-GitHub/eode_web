@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Elem, elements, load } from "./data";
+  import { Elem, elements, load, picked } from "./data";
   
   export let id: number;
 
@@ -35,10 +35,14 @@
     const contrastRatio = (hexR + hexG + hexB) / (255 * 3);
     return contrastRatio >= 0.5 ? 'black' : 'white';
   }
+
+  function pick() {
+    picked.set(id);
+  }
 </script>
 
 {#if loaded}
-  <div class="element" style={`background-color: #${color()}; color: ${textColor()}`}>
+  <div class="element" style={`background-color: #${color()}; color: ${textColor()}`} on:click={pick} data-id={id}>
     {elem.Name}
   </div>
 {:else}

@@ -1,11 +1,13 @@
 <script lang="ts">
-import Element from "./Element.svelte";
-
-
+  import { scale } from "svelte/transition";
+  import { sidebar } from "./data";
+  import Element from "./Element.svelte";
 </script>
 
-<div class="sidebar">
-  <Element id={1}/>
+<div class="sidebar" data-kind="sidebar">
+  {#each $sidebar as id}
+    <div in:scale out:scale><Element id={id}/></div>
+  {/each}
 </div>
 
 <style>
@@ -14,8 +16,9 @@ import Element from "./Element.svelte";
     background-color: #fff;
     height: 100vh;
     margin-right: 6px;
-    /*display: flex;
+    grid-column: 1;
+    overflow-y: scroll;
+    display: flex;
     flex-direction: column;
-    overflow-y: scroll;*/
   }
 </style>

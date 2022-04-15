@@ -114,3 +114,5 @@ export async function load(ids: number[]) {
   elements.set($elements);
 }
 
+export let sidebar: Writable<number[]> = writable([]);
+export let picked = writable(0);
