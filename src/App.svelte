@@ -1,8 +1,9 @@
 <script lang="ts">
 	import Loading from "./components/Loading.svelte";
-import { connect, login, Method, send } from "./conn";
+	import { connect, login, Method, send } from "./conn";
+import { initData } from "./data";
 	import Element from "./Element.svelte";
-import Inv from "./Inv.svelte";
+	import Inv from "./Inv.svelte";
 	import { error } from "./ui";
 
 	let guild = "";
@@ -21,7 +22,7 @@ import Inv from "./Inv.svelte";
 				glds.push(guild);
 				localStorage.setItem("guilds", JSON.stringify(glds));
 			}
-
+			await initData(guild);
 			hasGuild = true;
 			document.body.style.setProperty("background-color", "#eee");
 		}

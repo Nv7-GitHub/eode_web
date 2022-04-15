@@ -25,7 +25,6 @@
       elems = elems.sort((a, b) => {
         return a - b;
       });
-      elems = elems.slice(0, 200); // TODO: Be able to load and render all of them
       await load(elems);
       inv = elems;
     }
