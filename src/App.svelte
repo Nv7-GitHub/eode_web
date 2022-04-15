@@ -1,30 +1,39 @@
 <script lang="ts">
-	export let name: string;
+	import { connect, login, Method, send } from "./conn";
+	import Element from "./Element.svelte";
+	import { error } from "./ui";
+
+	let guild = "";
+	let hasGuild = false;
+
+	async function setGuild() {
+		let res = await send(Method.MethodGuild, {
+			gld: guild,
+		})
+		if (res.error) {
+			error(res.error);
+		} else {
+			hasGuild = true;
+		}
+	}
+
+	let connected = false;
+	let idProm = login();
+	idProm.then(async (id) => {
+		await connect(id);
+		connected = true;
+	})
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	{#if connected}
+		{#if hasGuild}
+			Connected!
+		{:else}
+			<input type="text" bind:value={guild} placeholder="Guild..."/>
+			<button on:click={setGuild}>Connect!</button>
+		{/if}
+	{:else}
+		Connecting...
+	{/if}
 </main>
-
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-</style>
