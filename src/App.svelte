@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { connect, login, Method, send } from "./conn";
+	import Loading from "./components/Loading.svelte";
+import { connect, login, Method, send } from "./conn";
 	import Element from "./Element.svelte";
+import Inv from "./Inv.svelte";
 	import { error } from "./ui";
 
 	let guild = "";
@@ -13,7 +15,24 @@
 		if (res.error) {
 			error(res.error);
 		} else {
+			// Add to prev
+			let glds = prevGuilds();
+			if (!glds.includes(guild)) {
+				glds.push(guild);
+				localStorage.setItem("guilds", JSON.stringify(glds));
+			}
+
 			hasGuild = true;
+			document.body.style.setProperty("background-color", "#eee");
+		}
+	}
+
+	function prevGuilds(): string[] {
+		let res = localStorage.getItem("guilds");
+		if (res) {
+			return JSON.parse(res);
+		} else {
+			return [];
 		}
 	}
 
@@ -28,12 +47,22 @@
 <main>
 	{#if connected}
 		{#if hasGuild}
-			Connected!
+			<Inv/>
 		{:else}
-			<input type="text" bind:value={guild} placeholder="Guild..."/>
-			<button on:click={setGuild}>Connect!</button>
+			<div class="container">
+				<form on:submit|preventDefault={setGuild} class="input-group mt-3">
+					<input type="text" class="form-control" placeholder="Guild ID..." bind:value={guild}>
+					<button class="btn btn-primary" type="submit">Connect!</button>
+				</form>
+
+				<ul class="list-group mt-3">
+					{#each prevGuilds() as gld}
+						<li class="list-group-item list-group-item-action" on:click={() => {guild = gld; setGuild();}}>{gld}</li>
+					{/each}
+				</ul>
+			</div>
 		{/if}
 	{:else}
-		Connecting...
+		<Loading/>
 	{/if}
 </main>

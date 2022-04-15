@@ -6,6 +6,7 @@ import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
+import copy from "rollup-plugin-copy";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -46,6 +47,18 @@ export default {
 				dev: !production
 			}
 		}),
+		copy({
+      targets: [
+        {
+          src: "node_modules/bootstrap/dist/css/bootstrap.min.css",
+          dest: "public/vendor/bootstrap/css",
+        },
+        {
+          src: "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+          dest: "public/vendor/bootstrap/js",
+        },
+      ],
+    }),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
 		css({ output: 'bundle.css' }),
