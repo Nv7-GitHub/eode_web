@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Loading from "./components/Loading.svelte";
 	import { connect, login, Method, send } from "./conn";
-import { initData } from "./data";
+	import { initData } from "./data";
 	import Element from "./Element.svelte";
 	import Inv from "./Inv.svelte";
+	import Sidebar from "./Sidebar.svelte";
 	import { error } from "./ui";
 
 	let guild = "";
@@ -48,7 +49,10 @@ import { initData } from "./data";
 <main>
 	{#if connected}
 		{#if hasGuild}
-			<Inv/>
+			<div class="main">
+				<Sidebar/>
+				<Inv/>
+			</div>
 		{:else}
 			<div class="container">
 				<form on:submit|preventDefault={setGuild} class="input-group mt-3">
@@ -67,3 +71,10 @@ import { initData } from "./data";
 		<Loading/>
 	{/if}
 </main>
+
+<style>
+	.main {
+		display: flex;
+		flex-direction: row;
+	}
+</style>

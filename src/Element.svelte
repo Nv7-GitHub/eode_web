@@ -12,7 +12,6 @@
   } else {
     load([id]).then(() => {
       elem = $elements.get(id);
-      console.log(elem);
       loaded = true;
     });
   }

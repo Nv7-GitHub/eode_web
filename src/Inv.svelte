@@ -25,6 +25,7 @@
       elems = elems.sort((a, b) => {
         return a - b;
       });
+      elems = elems.slice(0, 200);
       await load(elems);
       inv = elems;
     }
@@ -44,6 +45,8 @@
 <style>
   .inv {
     display: flex;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
+    overflow: scroll;
+    height: 100vh;
   }
 </style>

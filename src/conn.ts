@@ -1,3 +1,5 @@
+import { Mutex } from "async-mutex";
+
 // Auth
 export async function login(): Promise<string> {
   // Check if cached
@@ -34,6 +36,7 @@ export async function login(): Promise<string> {
 }
 
 var conn: WebSocket;
+const mutex = new Mutex();
 
 export async function connect(id: string): Promise<void> {
   conn = new WebSocket("wss://http.nv7haven.com/eode");
@@ -70,9 +73,11 @@ export async function send(method: Method, params: Record<string, any>): Promise
     method: method,
     params: params
   }
-  let out = new Promise<Response>((res) => {
+  let out = new Promise<Response>(async (res) => {
+    let release = await mutex.acquire();
     conn.onmessage = (e) => {
       let data = JSON.parse(e.data);
+      release();
       res(data);
     }
   })
