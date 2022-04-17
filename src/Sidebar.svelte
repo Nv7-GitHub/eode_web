@@ -6,7 +6,7 @@
 
 <div class="sidebar" data-kind="sidebar">
   {#each $sidebar as id}
-    <div in:scale out:scale><Element id={id}/></div>
+    <div in:scale out:scale class="spaced" data-kind="sidebar"><Element id={id} needsMargin={false}/></div>
   {/each}
 </div>
 
@@ -20,5 +20,9 @@
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
+  }
+
+  .spaced {
+    margin: 6px;
   }
 </style>

@@ -32,6 +32,6 @@
 
 {#if $picked != 0}
   <div style="position: absolute; top: {mousey + 5}px; left: {mousex + 5}px;" in:scale out:scale>
-    <Element id={$picked}/>
+    <Element id={$picked} isPicked={true} needsMargin={false}/>
   </div>
 {/if}
