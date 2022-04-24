@@ -2,6 +2,8 @@ import { Mutex } from "async-mutex";
 
 // Auth
 export async function login(): Promise<string> {
+  console.log(process);
+  
   // Check if cached
   if (window.localStorage.getItem("id")) {
     return window.localStorage.getItem("id");
