@@ -2,8 +2,6 @@ import { Mutex } from "async-mutex";
 
 // Auth
 export async function login(): Promise<string> {
-  console.log(process);
-  
   // Check if cached
   if (window.localStorage.getItem("id")) {
     return window.localStorage.getItem("id");
@@ -34,7 +32,8 @@ export async function login(): Promise<string> {
   url.searchParams.set("client_secret", "dRDvGpuHZAgH6u-F5_UHakTxZgLewhe4");
   url.searchParams.set("scope", "identify");
   let redirect_uri = "http://localhost:8000/";
-  if (process.env.isProd) {
+  let p = process;
+  if (p.env.isProd) {
     redirect_uri = "https://eodew.vercel.app/"
   }
   url.searchParams.set("redirect_uri", redirect_uri);
