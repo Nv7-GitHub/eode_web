@@ -25,7 +25,6 @@
       elems = elems.sort((a, b) => {
         return a - b;
       });
-      elems = elems.slice(0, 200);
       await load(elems);
       inv = elems;
     }
