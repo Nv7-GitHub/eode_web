@@ -2,9 +2,8 @@
 	import Loading from "./components/Loading.svelte";
 	import { connect, login, Method, send } from "./conn";
 	import { initData } from "./data";
-	import Element from "./Element.svelte";
 	import Inv from "./Inv.svelte";
-import Picked from "./Picked.svelte";
+	import Picked from "./Picked.svelte";
 	import Sidebar from "./Sidebar.svelte";
 	import { error } from "./ui";
 

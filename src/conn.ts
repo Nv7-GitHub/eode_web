@@ -31,7 +31,11 @@ export async function login(): Promise<string> {
   url.searchParams.set("response_type", "token");
   url.searchParams.set("client_secret", "dRDvGpuHZAgH6u-F5_UHakTxZgLewhe4");
   url.searchParams.set("scope", "identify");
-  url.searchParams.set("redirect_uri", "http://localhost:8000/"); // TODO: Make real url based on prod
+  let redirect_uri = "http://localhost:8000/";
+  if (process.env.isProd) {
+    redirect_uri = "https://eodew.vercel.app/"
+  }
+  url.searchParams.set("redirect_uri", redirect_uri);
   window.location.assign(url.toString());
 }
 
