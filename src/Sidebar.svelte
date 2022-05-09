@@ -57,6 +57,7 @@ import { writable } from "svelte/store";
     margin-right: 6px;
     grid-column: 1;
     overflow-y: scroll;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
   }
@@ -66,6 +67,7 @@ import { writable } from "svelte/store";
     flex-direction: column;
     width: 100%;
     height: calc(100% - 10vh - 12px);
+    overflow: hidden;
   }
 
   .spaced {

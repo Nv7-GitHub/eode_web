@@ -78,15 +78,6 @@
   
   async function pick() {
     if (!canPick) {
-      // Add to inv
-      if (!$inv.includes(id)) {
-        $inv.push(id);
-        inv.set($inv.sort((a, b) => {
-          return a - b;
-        }));
-        await tick();
-      }
-
       // Scroll
       const el = document.querySelector(`[data-id="${id}"][data-body="true"]`);
       el.scrollIntoView({behavior: 'smooth'});
