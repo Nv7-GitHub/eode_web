@@ -1,20 +1,22 @@
 <script lang="ts">
-import { onMount } from "svelte";
-
-  import { Elem, elements, load, picked } from "./data";
+  import { onMount, tick } from "svelte";
+  import type { Writable } from "svelte/store";
+  import { Elem, elements, load, picked, sidebar } from "./data";
   
   export let id: number;
-  export let isPicked = false;
   export let needsMargin = true;
+  export let canPick = true;
+  export let sidebarId = -1;
+  export let idWritable: Writable<number> = null;
 
   // Get element
   let loaded = false;
   let elem: Elem;
 
   onMount(() => {
-    if (isPicked) {
-      id = $picked;
-      picked.subscribe((v) => {
+    if (idWritable) {
+      id = $idWritable;
+      idWritable.subscribe((v) => {
         if (v != 0) {
           id = v;
         }
@@ -59,13 +61,45 @@ import { onMount } from "svelte";
     return contrastRatio >= 0.5 ? 'black' : 'white';
   }
 
-  function pick() {
-    picked.set(id);
+  let timer = null;
+  function mousedown() {
+    if (!canPick) {
+      return;
+    }
+
+    if (sidebarId != -1) {
+      timer = window.setTimeout(() => {
+        $sidebar.splice(sidebarId, 1)
+        sidebar.set($sidebar);
+        timer = null;
+      }, 250)
+    } 
+  }
+  
+  async function pick() {
+    if (!canPick) {
+      return;
+    }
+    
+    let doPick = false;
+    if (timer) {
+      window.clearTimeout(timer);
+      timer = null;
+      doPick = true;
+    }
+
+    if (sidebarId == -1 || doPick) { // there wasn't a timer
+      if ($picked != 0) {
+        picked.set(0);
+        await tick();
+      }
+      picked.set(id);
+    }
   }
 </script>
 
 {#if loaded}
-  <div class="element" class:spaced={needsMargin} class:smalltext={elem.Name.length > 9} style={`background-color: #${col}; color: ${textCol}`} on:click={pick} data-id={id}>
+  <div class="element" class:spaced={needsMargin} class:smalltext={elem.Name.length > 9} style={`background-color: #${col}; color: ${textCol}`} on:mousedown={mousedown} on:mouseup={pick} data-id={id}>
     {elem.Name}
   </div>
 {:else}

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { scale } from "svelte/transition";
-  import { picked, sidebar } from "./data";
+  import { picked, sidebar, sidebarCnt } from "./data";
   import Element from "./Element.svelte";
 
   let mousex = 0;
@@ -22,7 +22,8 @@
 
     let kind = targ.getAttribute("data-kind");
     if (kind == "sidebar") {
-      sidebar.set($sidebar.concat($picked));
+      sidebar.set($sidebar.concat({elem: $picked, id: $sidebarCnt}));
+      sidebarCnt.set($sidebarCnt + 1);
     }
     picked.set(0);
   }
@@ -32,6 +33,6 @@
 
 {#if $picked != 0}
   <div style="position: absolute; top: {mousey + 5}px; left: {mousex + 5}px;" in:scale out:scale>
-    <Element id={$picked} isPicked={true} needsMargin={false}/>
+    <Element id={$picked} idWritable={picked} needsMargin={false}/>
   </div>
 {/if}
