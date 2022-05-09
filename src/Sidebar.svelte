@@ -4,7 +4,7 @@ import { writable } from "svelte/store";
 
   import { scale, slide } from "svelte/transition";
   import { Method, send } from "./conn";
-  import { sidebar } from "./data";
+  import { inv, sidebar } from "./data";
   import Element from "./Element.svelte";
 
   let res = writable(0);
@@ -17,9 +17,18 @@ import { writable } from "svelte/store";
     }
     let val = await send(Method.MethodCombo, {"elems": $sidebar.map((v) => v.elem)});
     if (!val.error) {
+      let id = val.data["id"];
       res.set(0);
       await tick();
-      res.set(val.data["id"]);
+      res.set(id);
+
+      if (!$inv.includes(id)) {
+        $inv.push(id);
+        inv.set($inv.sort((a, b) => {
+          return a - b;
+        }));
+        await tick();
+      }
     } else {
       res.set(0);
     }
