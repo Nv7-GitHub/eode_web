@@ -121,3 +121,4 @@ type SidebarValue = {
 export let sidebar: Writable<SidebarValue[]> = writable([]);
 export let sidebarCnt = writable(0);
 export let picked = writable(0);
+export let inv: Writable<number[]> = writable([]);

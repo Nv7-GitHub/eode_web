@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, tick } from "svelte";
   import type { Writable } from "svelte/store";
-  import { Elem, elements, load, picked, sidebar } from "./data";
+  import { Elem, elements, inv, load, picked, sidebar, sidebarCnt } from "./data";
   
   export let id: number;
   export let needsMargin = true;
@@ -78,6 +78,22 @@
   
   async function pick() {
     if (!canPick) {
+      // Add to inv
+      if (!$inv.includes(id)) {
+        $inv.push(id);
+        inv.set($inv.sort((a, b) => {
+          return a - b;
+        }));
+        await tick();
+      }
+
+      // Scroll
+      const el = document.querySelector(`[data-id="${id}"][data-body="true"]`);
+      el.scrollIntoView({behavior: 'smooth'});
+
+      // Remove
+      sidebar.set([]);
+      sidebarCnt.set(0);
       return;
     }
     
@@ -99,7 +115,7 @@
 </script>
 
 {#if loaded}
-  <div class="element" class:spaced={needsMargin} class:smalltext={elem.Name.length > 9} style={`background-color: #${col}; color: ${textCol}`} on:mousedown={mousedown} on:mouseup={pick} data-id={id}>
+  <div class="element" class:spaced={needsMargin} class:smalltext={elem.Name.length > 9} style={`background-color: #${col}; color: ${textCol}`} on:mousedown={mousedown} on:mouseup={pick} data-id={id} data-body={(canPick && sidebarId == -1) ? true : null}>
     {elem.Name}
   </div>
 {:else}

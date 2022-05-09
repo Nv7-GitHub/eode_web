@@ -1,7 +1,7 @@
 <script lang="ts">
   import Loading from "./components/Loading.svelte";
   import { Method, send } from "./conn";
-  import { load } from "./data";
+  import { inv, load } from "./data";
   import Element from "./Element.svelte";
   import { error } from "./ui";
 
@@ -14,7 +14,6 @@
   let size = vh(10);
   let height = vh(100);
 
-  let inv: number[] = null;
   let start: number;
   let end: number;
   send(Method.MethodInv, {}).then(async (res) => {
@@ -26,14 +25,14 @@
         return a - b;
       });
       await load(elems);
-      inv = elems;
+      $inv = elems;
     }
   });
 </script>
 
 {#if inv}
   <div class="inv">
-    {#each inv as id}
+    {#each $inv as id}
       <Element id={id}></Element>
     {/each}
   </div>
