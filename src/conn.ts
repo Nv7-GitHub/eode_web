@@ -1,53 +1,32 @@
 import { Mutex } from "async-mutex";
-
-// Auth
-export async function login(): Promise<string> {
-  // Check if cached
-  if (window.localStorage.getItem("id")) {
-    return window.localStorage.getItem("id");
-  }
-
-  // Check if already there
-  if (window.location.hash) {
-    const parsedHash = new URLSearchParams(window.location.hash.slice(1, window.location.hash.length));
-    let tok = parsedHash.get("access_token");
-    let typ = parsedHash.get("token_type");
-    let res = await fetch('https://discord.com/api/users/@me', {
-			headers: {
-				authorization: `${typ} ${tok}`,
-			},
-		});
-    let val = await res.json();
-    let id = val["id"];
-    window.localStorage.setItem("id", id);
-    window.location.hash = "";
-    return val["id"];
-  }
-
-  // Get url
-  let url = new URL("https://discord.com/api/oauth2/authorize");
-  // Set params
-  url.searchParams.set("client_id", "964274065508556800");
-  url.searchParams.set("response_type", "token");
-  url.searchParams.set("client_secret", "dRDvGpuHZAgH6u-F5_UHakTxZgLewhe4");
-  url.searchParams.set("scope", "identify");
-  let redirect_uri = "http://localhost:8000/";
-  let p = process;
-  if (p.env.isProd) {
-    redirect_uri = "https://eodew.vercel.app/"
-  }
-  url.searchParams.set("redirect_uri", redirect_uri);
-  window.location.assign(url.toString());
-}
+import { error } from "./ui";
 
 var conn: WebSocket;
 const mutex = new Mutex();
 
-export async function connect(id: string): Promise<void> {
+export async function connect(): Promise<void> {
   conn = new WebSocket("wss://http.nv7haven.com/eode");
   return new Promise<void>((res) => {
-    conn.onopen = () => {
-      conn.send(id);
+    conn.onopen = async () => {
+      let url = JSON.parse(await new Promise<string>((resolve) => {
+        conn.onmessage = (event) => {
+          resolve(event.data);
+        }
+      })) as Response;
+      conn.onmessage = null;
+      if (url.error) {
+        error(url.error);
+        return;
+      }
+      window.open(url.data["url"]);
+
+      // Wait for login
+      await new Promise<void>((resolve) => {
+        conn.onmessage = (_) => {
+          resolve();
+        }
+      })
+      conn.onmessage = null;
       res();
     }
   })

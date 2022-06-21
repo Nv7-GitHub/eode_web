@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Loading from "./components/Loading.svelte";
-	import { connect, login, Method, send } from "./conn";
+	import { connect, Method, send } from "./conn";
 	import { initData } from "./data";
 	import Inv from "./Inv.svelte";
 	import Picked from "./Picked.svelte";
@@ -39,11 +39,7 @@
 	}
 
 	let connected = false;
-	let idProm = login();
-	idProm.then(async (id) => {
-		await connect(id);
-		connected = true;
-	})
+	connect().then(() => {connected = true;});
 </script>
 
 <main>
