@@ -65,7 +65,7 @@
 			</div>
 		{/if}
 	{:else}
-		<Loading/>
+		<Loading message="Logging in..."/>
 	{/if}
 </main>
 

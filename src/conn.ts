@@ -18,7 +18,7 @@ export async function connect(): Promise<void> {
         error(url.error);
         return;
       }
-      window.open(url.data["url"]);
+      let win = window.open(url.data["url"]);
 
       // Wait for login
       await new Promise<void>((resolve) => {
@@ -27,6 +27,7 @@ export async function connect(): Promise<void> {
         }
       })
       conn.onmessage = null;
+      win.close();
       res();
     }
   })

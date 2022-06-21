@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, tick } from "svelte";
   import type { Writable } from "svelte/store";
-  import { Elem, elements, inv, load, picked, sidebar, sidebarCnt } from "./data";
+  import { Elem, elements, inv, load, picked, scrollToElem, sidebar, sidebarCnt } from "./data";
   
   export let id: number;
   export let needsMargin = true;
@@ -79,8 +79,7 @@
   async function pick() {
     if (!canPick) {
       // Scroll
-      const el = document.querySelector(`[data-id="${id}"][data-body="true"]`);
-      el.scrollIntoView({behavior: 'smooth'});
+      scrollToElem(id);
 
       // Remove
       sidebar.set([]);

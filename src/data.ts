@@ -1,7 +1,20 @@
-import { init } from "svelte/internal";
+import { tick } from "svelte";
 import { Writable, writable } from "svelte/store";
 import { Method, send } from "./conn";
 import { error } from "./ui";
+
+// https://stackoverflow.com/a/44109531/11388343
+function vh(v) {
+  var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+  return (v * h) / 100;
+}
+function vw(v) {
+  var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+  return (v * w) / 100;
+}
+export function calcnum() {
+  return Math.floor((vw(90)-12)/(vh(10) + 12));
+}
 
 export interface Elem {
   ID: number;
@@ -122,3 +135,23 @@ export let sidebar: Writable<SidebarValue[]> = writable([]);
 export let sidebarCnt = writable(0);
 export let picked = writable(0);
 export let inv: Writable<number[]> = writable([]);
+
+export async function scrollToElem(id: number) {
+  let row = Math.ceil(id / calcnum());
+  console.log(row);
+  console.log(calcnum());
+  let rowsperscreen = Math.floor(vh(100) / (vh(10) + 12));
+  row -= rowsperscreen;
+  if (row < 0) {
+    row = 0;
+  }
+
+  let scroll = row * (vh(10) + 12);
+  let listelement = document.querySelector("svelte-virtual-list-viewport");
+  listelement.scroll(0, scroll);
+  
+  let el = document.querySelector(`[data-id="${id}"][data-body="true"]`);
+  el.scrollIntoView({behavior: 'smooth'});
+
+  // TODO: Fix this
+}
