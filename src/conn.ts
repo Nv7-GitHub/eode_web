@@ -5,7 +5,7 @@ var conn: WebSocket;
 const mutex = new Mutex();
 
 export async function connect(): Promise<void> {
-  conn = new WebSocket("wss://http.nv7haven.com/eode");
+  conn = new WebSocket("wss://eod.nv7haven.com/eode");
   return new Promise<void>((res) => {
     conn.onopen = async () => {
       let url = JSON.parse(await new Promise<string>((resolve) => {
